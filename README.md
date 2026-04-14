@@ -1,15 +1,15 @@
-# 📦 pip-analyzer (repository: pip-size-analyzer)
+# 📦 pip-analyzer (repository: pip-analyzer)
 
 > 🔍 Python package size analyzer with real-time metrics, smart caching, and CLI support.
 
-![Version](https://img.shields.io/github/v/release/gutermanjunior/pip-size-analyzer)
-![License](https://img.shields.io/github/license/gutermanjunior/pip-size-analyzer)
+![Version](https://img.shields.io/github/v/release/gutermanjunior/pip-analyzer)
+![License](https://img.shields.io/github/license/gutermanjunior/pip-analyzer)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-green)
 ![PowerShell](https://img.shields.io/badge/PowerShell-7%2B-blue)
 ![Status](https://img.shields.io/badge/status-active-success)
-![Last Commit](https://img.shields.io/github/last-commit/gutermanjunior/pip-size-analyzer)
-![Repo Size](https://img.shields.io/github/repo-size/gutermanjunior/pip-size-analyzer)
-![Stars](https://img.shields.io/github/stars/gutermanjunior/pip-size-analyzer?style=social)
+![Last Commit](https://img.shields.io/github/last-commit/gutermanjunior/pip-analyzer)
+![Repo Size](https://img.shields.io/github/repo-size/gutermanjunior/pip-analyzer)
+![Stars](https://img.shields.io/github/stars/gutermanjunior/pip-analyzer?style=social)
 
 ---
 
@@ -23,7 +23,7 @@
 
 Full documentation:
 
-👉 https://gutermanjunior.github.io/pip-size-analyzer/
+👉 https://gutermanjunior.github.io/pip-analyzer/
 
 ---
 
@@ -67,7 +67,7 @@ Each `.md` file inside `/docs` is:
 
 When accessing the hosted docs:
 
-👉 https://gutermanjunior.github.io/pip-size-analyzer/
+👉 https://gutermanjunior.github.io/pip-analyzer/
 
 The `docs/index.md` acts as the **entry point**.
 

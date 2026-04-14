@@ -96,3 +96,11 @@ Preserve:
 - simplicity
 - clarity
 - usability
+
+---
+
+## 🔗 Relation to README
+
+This document expands the "Future Improvements" section in the main README.
+
+It provides deeper context for design decisions and future directions.

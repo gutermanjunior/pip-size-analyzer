@@ -57,4 +57,4 @@ pip-analyzer is designed with:
 
 ## 🔗 Repository
 
-👉 https://github.com/gutermanjunior/pip-size-analyzer
+👉 https://github.com/gutermanjunior/pip-analyzer
