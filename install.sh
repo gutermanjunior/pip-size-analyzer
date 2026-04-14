@@ -9,7 +9,8 @@ BIN_DIR="$HOME/.local/bin"
 mkdir -p "$INSTALL_DIR"
 mkdir -p "$BIN_DIR"
 
-cp ./pip-analyze.ps1 "$INSTALL_DIR/"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cp "$SCRIPT_DIR/pip-analyze.ps1" "$INSTALL_DIR/"
 
 # Criar wrapper
 cat > "$BIN_DIR/pip-analyze" <<EOF

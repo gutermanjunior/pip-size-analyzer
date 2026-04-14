@@ -1,6 +1,98 @@
-# 📦 pip-analyzer
+# 📦 pip-analyzer (repository: pip-size-analyzer)
 
 > 🔍 Python package size analyzer with real-time metrics, smart caching, and CLI support.
+
+![Version](https://img.shields.io/github/v/release/gutermanjunior/pip-size-analyzer)
+![License](https://img.shields.io/github/license/gutermanjunior/pip-size-analyzer)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-green)
+![PowerShell](https://img.shields.io/badge/PowerShell-7%2B-blue)
+![Status](https://img.shields.io/badge/status-active-success)
+![Last Commit](https://img.shields.io/github/last-commit/gutermanjunior/pip-size-analyzer)
+![Repo Size](https://img.shields.io/github/repo-size/gutermanjunior/pip-size-analyzer)
+![Stars](https://img.shields.io/github/stars/gutermanjunior/pip-size-analyzer?style=social)
+
+---
+
+## 🎬 Demo
+
+![pip-analyzer demo](docs/demo-16.gif)
+
+---
+
+## 📚 Documentation
+
+Full documentation:
+
+👉 https://gutermanjunior.github.io/pip-size-analyzer/
+
+---
+
+### 📂 Documentation Structure
+
+The project includes a `/docs` directory with detailed documentation split by topic.
+
+These files are used both for:
+
+- GitHub browsing
+- GitHub Pages (hosted documentation site)
+
+---
+
+### 🔗 Internal Documentation Links
+
+You can access each section directly:
+
+- [Installation](docs/installation.md)
+- [Usage](docs/usage.md)
+- [Architecture](docs/architecture.md)
+- [Smart Cache](docs/cache.md)
+- [Roadmap](docs/roadmap.md)
+
+---
+
+### 🧠 How this works
+
+- The `README.md` provides a **high-level overview**
+- The `/docs` folder provides **detailed explanations**
+
+Each `.md` file inside `/docs` is:
+
+- a standalone document
+- accessible via GitHub
+- rendered automatically by GitHub Pages
+
+---
+
+### 🌍 GitHub Pages Navigation
+
+When accessing the hosted docs:
+
+👉 https://gutermanjunior.github.io/pip-size-analyzer/
+
+The `docs/index.md` acts as the **entry point**.
+
+From there, users can navigate to:
+
+- installation
+- usage
+- architecture
+- and other sections
+
+---
+
+### 🎯 Why this structure
+
+This separation allows:
+
+- cleaner README (fast onboarding)
+- deeper technical documentation
+- easier future expansion
+
+---
+
+### ⚠️ Note
+
+If you rename or move files inside `/docs`, make sure to update the links above to avoid broken navigation.
 
 ---
 
@@ -419,3 +511,473 @@ MIT
 ## 👨‍💻 Author
 
 Guterman Junior
+
+---
+
+## 🧩 Future Improvements (Technical Roadmap)
+
+This section outlines potential future enhancements for `pip-analyzer`, including design considerations, trade-offs, and architectural impact.
+
+These features are intentionally documented in detail to guide future development and maintain clarity on design decisions.
+
+---
+
+### ⚡ Parallel Processing Engine
+
+#### 📌 Description
+
+Introduce parallel execution for package size analysis using PowerShell 7 features (e.g., `ForEach-Object -Parallel` or runspaces).
+
+Instead of processing packages sequentially:
+
+```
+pip-size pkg1 → pip-size pkg2 → pip-size pkg3
+```
+
+The tool would process multiple packages concurrently:
+
+```
+[pkg1, pkg2, pkg3, pkg4] → parallel workers
+```
+
+---
+
+#### 🎯 Motivation
+
+- Current execution is O(n) with external calls (`pip-size`)
+- Performance degrades significantly with large environments
+- Modern CPUs are underutilized
+
+---
+
+#### ✅ Advantages
+
+- Significant speed improvement (2x–10x depending on environment)
+- Better utilization of multi-core systems
+- Improved user experience in large environments
+
+---
+
+#### ⚠️ Trade-offs / Challenges
+
+- Breaks real-time ordered output
+- `Write-Progress` is not thread-safe
+- Metrics (Inst, Avg, Mov) need redesign
+- Increased complexity (synchronization, aggregation)
+
+---
+
+#### 🧠 Architectural Impact
+
+Would require splitting execution into:
+
+1. **Parallel phase** → data collection
+2. **Sequential phase** → rendering and metrics
+
+---
+
+---
+
+### 📊 Advanced Progress System (Parallel-safe)
+
+#### 📌 Description
+
+Redesign progress tracking to support parallel execution.
+
+Instead of relying on `Write-Progress` per iteration, use:
+
+- shared counters
+- periodic UI refresh
+- aggregated status
+
+---
+
+#### 🎯 Motivation
+
+- Current progress system assumes sequential execution
+- Parallel execution would produce inconsistent output
+
+---
+
+#### ✅ Advantages
+
+- Enables parallel processing without losing UX
+- More stable and scalable UI updates
+
+---
+
+#### ⚠️ Trade-offs
+
+- More complex implementation
+- Less "live per-package feedback"
+
+---
+
+---
+
+### 🧠 Enhanced Smart Cache (Incremental Cache)
+
+#### 📌 Description
+
+Improve cache granularity by storing per-package hashes instead of full environment hash.
+
+Current model:
+
+```
+hash(pip freeze) → full cache
+```
+
+Proposed model:
+
+```
+package_name + version → cached size
+```
+
+---
+
+#### 🎯 Motivation
+
+- Current cache invalidates entirely on any change
+- Inefficient for large environments with small updates
+
+---
+
+#### ✅ Advantages
+
+- Partial cache reuse
+- Faster updates after small changes
+- Better scalability
+
+---
+
+#### ⚠️ Trade-offs
+
+- More complex cache structure
+- Risk of stale data if not carefully validated
+
+---
+
+---
+
+### 🌳 Dependency Tree Analysis
+
+#### 📌 Description
+
+Analyze dependency relationships between packages.
+
+Example output:
+
+```
+pandas
+ ├── numpy
+ ├── python-dateutil
+ └── pytz
+```
+
+---
+
+#### 🎯 Motivation
+
+- Current tool shows size, but not dependency structure
+- Hard to identify indirect heavy dependencies
+
+---
+
+#### ✅ Advantages
+
+- Better insight into dependency impact
+- Enables optimization decisions (e.g., removing heavy trees)
+
+---
+
+#### ⚠️ Trade-offs
+
+- Requires integration with tools like `pipdeptree`
+- Adds complexity to output rendering
+
+---
+
+---
+
+### 📊 Visualization Layer (Charts / Dashboard)
+
+#### 📌 Description
+
+Add graphical output:
+
+- pie charts (size distribution)
+- bar charts (top packages)
+- interactive dashboards
+
+---
+
+#### 🎯 Motivation
+
+- Tabular output is informative but limited
+- Visual representation improves comprehension
+
+---
+
+#### ✅ Advantages
+
+- Better data interpretation
+- Useful for presentations and reports
+
+---
+
+#### ⚠️ Trade-offs
+
+- Requires additional dependencies (e.g., Python or JS tools)
+- Moves away from pure CLI philosophy
+
+---
+
+---
+
+### 🌍 Cross-platform Native CLI (Non-PowerShell)
+
+#### 📌 Description
+
+Provide a native CLI version (e.g., Python-based or compiled binary).
+
+---
+
+#### 🎯 Motivation
+
+- PowerShell is not always available or preferred
+- Broader adoption requires native tooling
+
+---
+
+#### ✅ Advantages
+
+- True cross-platform compatibility
+- Easier distribution (pip, brew, etc.)
+
+---
+
+#### ⚠️ Trade-offs
+
+- Requires rewriting or wrapping logic
+- Increased maintenance overhead
+
+---
+
+---
+
+### 📦 Packaging & Distribution
+
+#### 📌 Description
+
+Distribute the tool via package managers:
+
+- pipx
+- Homebrew
+- Chocolatey
+
+---
+
+#### 🎯 Motivation
+
+- Manual installation is error-prone
+- Users expect standard install methods
+
+---
+
+#### ✅ Advantages
+
+- Easier adoption
+- Standardized installation and updates
+
+---
+
+#### ⚠️ Trade-offs
+
+- Requires packaging infrastructure
+- Versioning and release management complexity
+
+---
+
+---
+
+### 🧪 Benchmark Mode
+
+#### 📌 Description
+
+Add a mode to benchmark environment analysis performance.
+
+Example:
+
+```
+pip-analyze --benchmark
+```
+
+Outputs:
+
+- total time
+- avg time per package
+- slowest packages
+
+---
+
+#### 🎯 Motivation
+
+- Helps identify bottlenecks (network/cache)
+- Useful for performance tuning
+
+---
+
+#### ✅ Advantages
+
+- Improves observability
+- Useful for debugging performance issues
+
+---
+
+#### ⚠️ Trade-offs
+
+- Adds complexity to metrics system
+
+---
+
+---
+
+### 🔍 Filtering & Search
+
+#### 📌 Description
+
+Allow filtering results:
+
+```
+pip-analyze --filter numpy
+pip-analyze --min-size 10MB
+```
+
+---
+
+#### 🎯 Motivation
+
+- Large outputs are hard to scan manually
+
+---
+
+#### ✅ Advantages
+
+- Faster insights
+- More targeted analysis
+
+---
+
+#### ⚠️ Trade-offs
+
+- Additional parsing logic
+- More CLI complexity
+
+---
+
+---
+
+## 🧠 Final Notes
+
+These features are intentionally not implemented yet to preserve:
+
+- simplicity
+- stability
+- readability of the current version
+
+The goal is to evolve `pip-analyzer` incrementally without compromising its core strengths:
+
+- clarity
+- observability
+- low friction usage
+
+---
+
+## 🗺️ Roadmap Strategy
+
+The features listed in the *Technical Roadmap* are not meant to be implemented all at once.
+
+Instead, they represent a pool of possible improvements that must be **prioritized** before each release.
+
+---
+
+### 🧠 What "prioritization" means
+
+Prioritization is the process of deciding:
+
+- what features will be implemented next
+- what features will be postponed
+- what brings the most value with the least complexity
+
+---
+
+### ⚖️ How features are evaluated
+
+Each feature should be considered based on two main factors:
+
+#### 1. Impact
+
+- Does it significantly improve user experience?
+- Does it solve a real limitation of the tool?
+
+#### 2. Implementation Cost
+
+- How complex is the implementation?
+- Does it introduce architectural changes?
+
+---
+
+### 📊 Priority Matrix
+
+| Feature Type            | Impact | Cost | Priority |
+|------------------------|--------|------|----------|
+| Filtering / Search     | Medium | Low  | High     |
+| Benchmark Mode         | Medium | Low  | High     |
+| Parallel Processing    | High   | High | Medium   |
+| Incremental Cache      | High   | High | Medium   |
+| Visualization Layer    | Medium | High | Low      |
+
+---
+
+### 🎯 Example Roadmap Strategy
+
+Instead of implementing everything at once:
+
+#### ✅ Incremental approach (recommended)
+
+**v1.3**
+- Filtering (`--filter`, `--min-size`)
+- Benchmark mode
+- Small UX improvements
+
+**v1.4**
+- Parallel processing (structured)
+- Improved progress system
+
+---
+
+### ⚠️ Why this matters
+
+Trying to implement all features at once can lead to:
+
+- increased complexity
+- reduced stability
+- slower development
+
+A staged roadmap ensures:
+
+- steady progress
+- maintainable code
+- consistent user experience
+
+---
+
+### 🧩 Philosophy
+
+The goal is to evolve `pip-analyzer` incrementally, preserving its core strengths:
+
+- clarity
+- observability
+- simplicity
+
+while gradually adding more advanced capabilities.
